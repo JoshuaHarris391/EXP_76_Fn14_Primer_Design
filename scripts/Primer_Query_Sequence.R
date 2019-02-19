@@ -94,16 +94,18 @@ Fn14_whole_seq_dnastring[start(sgRNA_2_match) : end(sgRNA_2_match)] %>% as.chara
 
 
 #' # Creating a query sequence for Fn14 primer blast
-#' Query sequences will have 800bp upstream of the 5' end and 800bp downstream from the 3' end of the matching sgRNA sequence
-#' 
+#' Query sequences will have 'buffer_bp' number of base pairs upstream of the 5' end and 'buffer_bp' number of base pairs downstream from the 3' end of the matching sgRNA sequence
+#'
+# Defining number of buffer base pairs
+buffer_bp <- 800
 #' ## sgRNA_1 Primer Query Sequence
-Fn14_whole_seq_dnastring[(start(sgRNA_1_match)-800) : end(sgRNA_1_match+800)] %>% 
+Fn14_whole_seq_dnastring[(start(sgRNA_1_match)-buffer_bp) : end(sgRNA_1_match+buffer_bp)] %>% 
   as.character() %>% 
   print()
 
 
 #' ## sgRNA_2 Primer Query Sequence
-Fn14_whole_seq_dnastring[(start(sgRNA_2_match)-800) : end(sgRNA_2_match+800)] %>% 
+Fn14_whole_seq_dnastring[(start(sgRNA_2_match)-buffer_bp) : end(sgRNA_2_match+buffer_bp)] %>% 
   as.character() %>% 
    print()
 

@@ -61,6 +61,7 @@ sgRNA_2 <- 'AGCTTGGCTCCCGCCGCGTC'
 sgRNA_2 <- DNAString(sgRNA_2) %>% 
   reverseComplement() %>% 
   as.character()
+print(sgRNA_2)
 
 #' ## Match reverse complement to sequence 
 sgRNA_1_match <- matchPattern(sgRNA_1, Fn14_whole_seq_dnastring)

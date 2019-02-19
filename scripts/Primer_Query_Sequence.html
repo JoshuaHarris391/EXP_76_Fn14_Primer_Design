@@ -186,7 +186,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Primer_Query_Sequence.R</h1>
 <h4 class="author"><em>joshua_harris</em></h4>
-<h4 class="date"><em>Tue Feb 19 14:14:38 2019</em></h4>
+<h4 class="date"><em>Tue Feb 19 14:17:27 2019</em></h4>
 
 </div>
 
@@ -274,7 +274,9 @@ sgRNA_2 &lt;- 'AGCTTGGCTCCCGCCGCGTC' </code></pre>
 <h2>Converting sgRNA_2 to rev comp</h2>
 <pre class="r"><code>sgRNA_2 &lt;- DNAString(sgRNA_2) %&gt;% 
   reverseComplement() %&gt;% 
-  as.character()</code></pre>
+  as.character()
+print(sgRNA_2)</code></pre>
+<pre><code>## [1] &quot;GACGCGGCGGGAGCCAAGCT&quot;</code></pre>
 </div>
 <div id="match-reverse-complement-to-sequence" class="section level2">
 <h2>Match reverse complement to sequence</h2>

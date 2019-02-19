@@ -1,4 +1,4 @@
-#' # EXP_76 obtaining primer query sequences
+#' # [EXP_76](https://github.com/JoshuaHarris391/Lab_Notebook_Cunliffe_2018/blob/master/Experimental_Log/Logs/EXP_76.md) obtaining primer query sequences
 #' Primers flanking the two sgRNA target sites from EXP_73 will be determined by first obtaining a query sequence for each target site to put through to primer BLAST
 #' 
 
@@ -16,7 +16,7 @@ library('tidyverse')
 
 
 #' ## Setting WD
-# setwd('~/Dropbox/Research/PhD/Experiments/EXP_76/')
+# setwd('~/Dropbox/Research/PhD/Experiments/EXP_76/EXP_76_Fn14_Primer_Design/scripts/')
 
 
 #' ## Reading in fasta files
@@ -65,9 +65,14 @@ sgRNA_2 <- DNAString(sgRNA_2) %>%
   as.character()
 print(sgRNA_2)
 
-#' ## Match reverse complement to sequence 
+
+#' #### Match position for sgRNA_1 to Fn14 whole sequence
 sgRNA_1_match <- matchPattern(sgRNA_1, Fn14_whole_seq_dnastring)
+print(sgRNA_1_match)
+
+#' #### Match position for sgRNA_2 to Fn14 whole sequence
 sgRNA_2_match <- matchPattern(as.character(sgRNA_2), Fn14_whole_seq_dnastring)
+print(sgRNA_2_match)
 
 #' # Printing query sequence and printing match sequence 
 #' ## sgRNA_1 sequence
@@ -113,6 +118,16 @@ EXP_76_sgRNA_2_Query <- Fn14_whole_seq_dnastring[(start(sgRNA_2_match)-buffer_bp
   as.character()
 print(EXP_76_sgRNA_2_Query)
 print(nchar(EXP_76_sgRNA_2_Query))
+
+
+#' ## CRISPR-CAS9 clevage sites
+#' Base pair position is relative to the query sequence 
+sgRNA_1_match_query <- matchPattern(sgRNA_1, EXP_76_sgRNA_1_Query)
+paste("EXP_76_sgRNA_1_Query Clevage site is between base pairs:", end(sgRNA_1_match_query), "and", end(sgRNA_1_match_query)+1)
+
+
+sgRNA_2_match_query <- matchPattern(sgRNA_2, EXP_76_sgRNA_2_Query)
+paste("EXP_76_sgRNA_2_Query Clevage site is between base pairs:", end(sgRNA_2_match_query), "and", end(sgRNA_2_match_query)+1)
 
 
 #' ## Exporting query sequences as fasta files

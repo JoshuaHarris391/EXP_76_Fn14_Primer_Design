@@ -186,13 +186,13 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Primer_Query_Sequence.R</h1>
 <h4 class="author"><em>joshua_harris</em></h4>
-<h4 class="date"><em>Tue Feb 19 14:22:47 2019</em></h4>
+<h4 class="date"><em>Tue Feb 19 15:42:11 2019</em></h4>
 
 </div>
 
 
 <div id="exp_76-obtaining-primer-query-sequences" class="section level1">
-<h1>EXP_76 obtaining primer query sequences</h1>
+<h1><a href="https://github.com/JoshuaHarris391/Lab_Notebook_Cunliffe_2018/blob/master/Experimental_Log/Logs/EXP_76.md">EXP_76</a> obtaining primer query sequences</h1>
 <p>Primers flanking the two sgRNA target sites from EXP_73 will be determined by first obtaining a query sequence for each target site to put through to primer BLAST</p>
 <div id="installing-package" class="section level2">
 <h2>Installing package</h2>
@@ -209,7 +209,7 @@ library('tidyverse')</code></pre>
 </div>
 <div id="setting-wd" class="section level2">
 <h2>Setting WD</h2>
-<pre class="r"><code># setwd('~/Dropbox/Research/PhD/Experiments/EXP_76/')</code></pre>
+<pre class="r"><code># setwd('~/Dropbox/Research/PhD/Experiments/EXP_76/EXP_76_Fn14_Primer_Design/scripts/')</code></pre>
 </div>
 <div id="reading-in-fasta-files" class="section level2">
 <h2>Reading in fasta files</h2>
@@ -278,11 +278,26 @@ sgRNA_2 &lt;- 'AGCTTGGCTCCCGCCGCGTC' </code></pre>
   as.character()
 print(sgRNA_2)</code></pre>
 <pre><code>## [1] &quot;GACGCGGCGGGAGCCAAGCT&quot;</code></pre>
-</div>
-<div id="match-reverse-complement-to-sequence" class="section level2">
-<h2>Match reverse complement to sequence</h2>
+<div id="match-position-for-sgrna_1-to-fn14-whole-sequence" class="section level4">
+<h4>Match position for sgRNA_1 to Fn14 whole sequence</h4>
 <pre class="r"><code>sgRNA_1_match &lt;- matchPattern(sgRNA_1, Fn14_whole_seq_dnastring)
-sgRNA_2_match &lt;- matchPattern(as.character(sgRNA_2), Fn14_whole_seq_dnastring)</code></pre>
+print(sgRNA_1_match)</code></pre>
+<pre><code>##   Views on a 4072-letter DNAString subject
+## subject: TCCCGAGTAGCTGAGATTACAGGCGCCCACTA...AGAGGCTCCCTGGGGAGAGATGGCAGAGAGG
+## views:
+##     start  end width
+## [1]  1068 1087    20 [CGGGCGCAGGACGTGCACTA]</code></pre>
+</div>
+<div id="match-position-for-sgrna_2-to-fn14-whole-sequence" class="section level4">
+<h4>Match position for sgRNA_2 to Fn14 whole sequence</h4>
+<pre class="r"><code>sgRNA_2_match &lt;- matchPattern(as.character(sgRNA_2), Fn14_whole_seq_dnastring)
+print(sgRNA_2_match)</code></pre>
+<pre><code>##   Views on a 4072-letter DNAString subject
+## subject: TCCCGAGTAGCTGAGATTACAGGCGCCCACTA...AGAGGCTCCCTGGGGAGAGATGGCAGAGAGG
+## views:
+##     start  end width
+## [1]  2592 2611    20 [GACGCGGCGGGAGCCAAGCT]</code></pre>
+</div>
 </div>
 </div>
 <div id="printing-query-sequence-and-printing-match-sequence" class="section level1">
@@ -348,6 +363,16 @@ print(EXP_76_sgRNA_2_Query)</code></pre>
 <pre><code>## [1] &quot;TGCGCGGGGAGGGCGCCGGTGACTCACGTTATTCGAGCCGGCCGACCCTGACCTCAGACCCCAGAATAGCCGAGTCCCGCCCCCAGCCTCTGACCCGAGGCCCCCTCCCCAGGCACCGCCCCCTGCTCCCGCGGCAGCTCCTGGAGCGCGGACCTGGACAAGTGCATGGACTGCGCGTCTTGCAGGGCGCGACCGCACAGCGACTTCTGCCTGGGCTGTGAGTGGGGGGCAGGGCCAGTGGCCAGCGGACCCCAGACTGGGAGGGAGGGTGGCTGGTGCGCAGAGCGGGGCCGAGAGCTTTGCATCTGGGAAATCATTCGGGAGGAGGTGGGAGCTGGGAGGGGGCTCCGGTCAGGGAGGAGGCCACGTTTGGGAGAAGGCAGAAGGCTCAGTCTTAGGGGGCGGGGCTGGCCTGGAGAGGGGCGAGGTCTGACTCCGAGTCCCGCCCCCAGGCGCTGCAGCACCTCCTGCCCCCTTCCGGCTGCTTTGGCCCATCCTTGGGGGCGCTCTGAGCCTGACCTTCGTGCTGGGGCTGCTTTCTGGCTTTTTGGTCTGGAGACGATGCCGCAGGAGAGAGAAGTTCACCAGTAAGTGTGCCCTGGCCTGCCCAGCCCTGTCAGCACTCGACCTTTTCTCTGCTGCTGACGACCCCACCTCTTATCTTGCAGCCCCCATAGAGGAGACCGGCGGAGAGGGCTGCCCAGCTGTGGCGCTGATCCAGTGACAATGTGCCCCCTGCCAGCCGGGGCTCGCCCACTCATCATTCATTCATCCATTCTAGAGCCAGTCTCTGCCTCCCAGACGCGGCGGGAGCCAAGCTCCTCCAACCACAAGGGGGGTGGGGGGCGGTGAATCACCTCTGAGGCCTGGGCCCAGGGTTCAGGGGAACCTTCCAAGGTGTCTGGTTGCCCTGCCTCTGGCTCCAGAACAGAAAGGGAGCCTCACGCTGGCTCACACAAAACAGCTGACACTGACTAAGGAACTGCAGCATTTGCACAGGGGAGGGGGGTGCCCTCCTTCCTAGAGGCCCTGGGGGCCAGGCTGACTTGGGGGGCAGACTTGACACTAGGCCCCACTCACTCAGATGTCCTGAAATTCCACCACGGGGGTCACCCTGGGGGGTTAGGGACCTATTTTTAACACTAGGGGGCTGGCCCACTAGGAGGGCTGGCCCTAAGATACAGACCCCCCCAACTCCCCAAAGCGGGGAGGAGATATTTATTTTGGGGAGAGTTTGGAGGGGAGGGAGAATTTATTAATAAAAGAATCTTTAACTTTAAATGGTTTGGAGAGGCAGTGATCCCCGACTGACTCCCCTGAGCTGGAGGGAGGGAGTGAGTCAGCCAGCCGCGGGGGCGGGGGTGAGGCTCTGACTCACACATTCTCAATGCCTGGAACTCAGCCGGCAAGGACCTGGCTGGCCCTAACAGTTTTCCAGGGAAGATCTTGAGGAGAAACCCCAGCATCCCGCGCCTCTGCCCTCTCCACCATCCCCAAAAGCCCCAGGTTCCAGACTGAAGCCTTCCTTTGCTCAGCAATCTTTATTCAGTTCTTCTTGGGGGTGGGATGCCTCCCTTCCCATGCTCCCACCCCTCCCATCCCAGAACTCCGTTGGGCTCA&quot;</code></pre>
 <pre class="r"><code>print(nchar(EXP_76_sgRNA_2_Query))</code></pre>
 <pre><code>## [1] 1620</code></pre>
+</div>
+<div id="crispr-cas9-clevage-sites" class="section level2">
+<h2>CRISPR-CAS9 clevage sites</h2>
+<p>Base pair position is relative to the query sequence</p>
+<pre class="r"><code>sgRNA_1_match_query &lt;- matchPattern(sgRNA_1, EXP_76_sgRNA_1_Query)
+paste(&quot;EXP_76_sgRNA_1_Query Clevage site is between base pairs:&quot;, end(sgRNA_1_match_query), &quot;and&quot;, end(sgRNA_1_match_query)+1)</code></pre>
+<pre><code>## [1] &quot;EXP_76_sgRNA_1_Query Clevage site is between base pairs: 820 and 821&quot;</code></pre>
+<pre class="r"><code>sgRNA_2_match_query &lt;- matchPattern(sgRNA_2, EXP_76_sgRNA_2_Query)
+paste(&quot;EXP_76_sgRNA_2_Query Clevage site is between base pairs:&quot;, end(sgRNA_2_match_query), &quot;and&quot;, end(sgRNA_2_match_query)+1)</code></pre>
+<pre><code>## [1] &quot;EXP_76_sgRNA_2_Query Clevage site is between base pairs: 820 and 821&quot;</code></pre>
 </div>
 <div id="exporting-query-sequences-as-fasta-files" class="section level2">
 <h2>Exporting query sequences as fasta files</h2>

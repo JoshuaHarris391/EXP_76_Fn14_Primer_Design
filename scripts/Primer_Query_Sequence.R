@@ -21,6 +21,8 @@ library('tidyverse')
 
 #' ## Reading in fasta files
 #' These sequences contain 1kB upstream and 1kb downstream of the first and last exon
+#' Sequence includes introns and 4 exons
+#' fasta file was obtained from UCSC genome browser. [link to entry](https://genome.ucsc.edu/cgi-bin/hgGene?hgg_gene=ENST00000326577.8&hgg_prot=ENST00000326577.8&hgg_chrom=chr16&hgg_start=3020311&hgg_end=3022383&hgg_type=knownGene&db=hg38&hgsid=712319617_zMV9zkvqyZxeyCewSf3qflc4CiR1)
 #'
 #' #### Whole Sequence (including 1kB up and downstream)
 Fn14_whole_seq_fasta <- read.fasta(file = "../sequence/TNFRSF12A_Whole_Seq.fa", 

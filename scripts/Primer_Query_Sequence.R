@@ -1,4 +1,6 @@
-#' # Reading in primer
+#' # EXP_76 obtaining primer query sequences
+#' Primers flanking the two sgRNA target sites from EXP_73 will be determined by first obtaining a query sequence for each target site to put through to primer BLAST
+#' 
 
 #' ## Installing package
 # source("http://bioconductor.org/biocLite.R")

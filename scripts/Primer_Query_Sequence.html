@@ -186,7 +186,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Primer_Query_Sequence.R</h1>
 <h4 class="author"><em>joshua_harris</em></h4>
-<h4 class="date"><em>Mon Feb 18 18:47:45 2019</em></h4>
+<h4 class="date"><em>Tue Feb 19 14:14:38 2019</em></h4>
 
 </div>
 
@@ -208,12 +208,7 @@ library('tidyverse')</code></pre>
 </div>
 <div id="setting-wd" class="section level2">
 <h2>Setting WD</h2>
-<pre class="r"><code># the following line is for getting the path of your current open file
-# current_path &lt;- getActiveDocumentContext()$path 
-# # The next line set the working directory to the relevant one:
-# setwd(dirname(current_path))
-# # you can make sure you are in the right directory
-# print(getwd())</code></pre>
+<pre class="r"><code># setwd('~/Dropbox/Research/PhD/Experiments/EXP_76/')</code></pre>
 </div>
 <div id="reading-in-fasta-files" class="section level2">
 <h2>Reading in fasta files</h2>
@@ -270,13 +265,16 @@ for (i in 1:length(Fn14_Region_seq)) {
 </div>
 <div id="loading-in-sgrna-target-sequences" class="section level2">
 <h2>Loading in sgRNA target sequences</h2>
+<p>Sequences are 5’ to 3’</p>
 <pre class="r"><code>sgRNA_1 &lt;- 'CGGGCGCAGGACGTGCACTA'
 sgRNA_2 &lt;- 'AGCTTGGCTCCCGCCGCGTC' </code></pre>
 <p>*sgRNA_2 targets the 3’ UTR on the antisense strand, therefore it needs to be converted to the reverse complement</p>
 </div>
 <div id="converting-sgrna_2-to-rev-comp" class="section level2">
 <h2>Converting sgRNA_2 to rev comp</h2>
-<pre class="r"><code>sgRNA_2 &lt;- DNAString(sgRNA_2) %&gt;% reverseComplement()</code></pre>
+<pre class="r"><code>sgRNA_2 &lt;- DNAString(sgRNA_2) %&gt;% 
+  reverseComplement() %&gt;% 
+  as.character()</code></pre>
 </div>
 <div id="match-reverse-complement-to-sequence" class="section level2">
 <h2>Match reverse complement to sequence</h2>
@@ -288,37 +286,70 @@ sgRNA_2_match &lt;- matchPattern(as.character(sgRNA_2), Fn14_whole_seq_dnastring
 <h1>Printing query sequence and printing match sequence</h1>
 <div id="sgrna_1-sequence" class="section level2">
 <h2>sgRNA_1 sequence</h2>
-<pre class="r"><code>sgRNA_1 %&gt;% as.character() %&gt;% print()</code></pre>
+<pre class="r"><code>sgRNA_1 %&gt;% 
+  as.character() %&gt;% 
+  print()</code></pre>
 <pre><code>## [1] &quot;CGGGCGCAGGACGTGCACTA&quot;</code></pre>
 <div id="fn14-whole-sequence-lookup" class="section level4">
 <h4>Fn14 whole sequence lookup</h4>
-<pre class="r"><code>Fn14_whole_seq_dnastring[start(sgRNA_1_match) : end(sgRNA_1_match)] %&gt;% as.character() %&gt;% print()</code></pre>
+<pre class="r"><code>Fn14_whole_seq_dnastring[start(sgRNA_1_match) : end(sgRNA_1_match)] %&gt;% 
+  as.character() %&gt;% 
+  print()</code></pre>
 <pre><code>## [1] &quot;CGGGCGCAGGACGTGCACTA&quot;</code></pre>
+</div>
+<div id="testing-for-a-match" class="section level4">
+<h4>Testing for a match</h4>
+<pre class="r"><code>Fn14_whole_seq_dnastring[start(sgRNA_1_match) : end(sgRNA_1_match)] %&gt;% as.character() %in% sgRNA_1 %&gt;% as.character()</code></pre>
+<pre><code>## [1] &quot;TRUE&quot;</code></pre>
 </div>
 </div>
 <div id="sgrna_2-sequence" class="section level2">
 <h2>sgRNA_2 sequence</h2>
-<pre class="r"><code>sgRNA_2 %&gt;% as.character() %&gt;% print()</code></pre>
+<pre class="r"><code>sgRNA_2 %&gt;% 
+  as.character() %&gt;% 
+  print()</code></pre>
 <pre><code>## [1] &quot;GACGCGGCGGGAGCCAAGCT&quot;</code></pre>
 <div id="fn14-whole-sequence-lookup-1" class="section level4">
 <h4>Fn14 whole sequence lookup</h4>
-<pre class="r"><code>Fn14_whole_seq_dnastring[start(sgRNA_2_match) : end(sgRNA_2_match)] %&gt;% as.character() %&gt;% print()</code></pre>
+<pre class="r"><code>Fn14_whole_seq_dnastring[start(sgRNA_2_match) : end(sgRNA_2_match)] %&gt;% 
+  as.character() %&gt;% 
+  print()</code></pre>
 <pre><code>## [1] &quot;GACGCGGCGGGAGCCAAGCT&quot;</code></pre>
+</div>
+<div id="testing-for-a-match-1" class="section level4">
+<h4>Testing for a match</h4>
+<pre class="r"><code>Fn14_whole_seq_dnastring[start(sgRNA_2_match) : end(sgRNA_2_match)] %&gt;% as.character() %in% sgRNA_2 %&gt;% as.character()</code></pre>
+<pre><code>## [1] &quot;TRUE&quot;</code></pre>
 </div>
 </div>
 </div>
 <div id="creating-a-query-sequence-for-fn14-primer-blast" class="section level1">
 <h1>Creating a query sequence for Fn14 primer blast</h1>
-<p>Query sequences will have 800bp upstream of the 5’ end and 800bp downstream from the 3’ end of the matching sgRNA sequence</p>
+<p>Query sequences will have ‘buffer_bp’ number of base pairs upstream of the 5’ end and ‘buffer_bp’ number of base pairs downstream from the 3’ end of the matching sgRNA sequence</p>
+<pre class="r"><code># Defining number of buffer base pairs
+buffer_bp &lt;- 800</code></pre>
 <div id="sgrna_1-primer-query-sequence" class="section level2">
 <h2>sgRNA_1 Primer Query Sequence</h2>
-<pre class="r"><code>Fn14_whole_seq_dnastring[(start(sgRNA_1_match)-800) : end(sgRNA_1_match+800)] %&gt;% as.character() %&gt;% print()</code></pre>
+<pre class="r"><code>EXP_76_sgRNA_1_Query &lt;- Fn14_whole_seq_dnastring[(start(sgRNA_1_match)-buffer_bp) : end(sgRNA_1_match+buffer_bp)] %&gt;% 
+  as.character()
+print(EXP_76_sgRNA_1_Query)</code></pre>
 <pre><code>## [1] &quot;GGAGGCTGAGGTGGGAGGCTCACCTGAGCCCAGAGAGCCGTGATCGTACCACTGCACTCCAGGCTGAGCAAGAGTGAGACGCAATCTCAAGGGGAGGTGGGGGGAAGGAAGCTGCAGTGATCTCTGCATGGATTGGTCGTGTGTCTGATTTCTTTTTATTGTTTGTTTGTTTGTTTATTTATTTATTTATTTATTTATTTATTTATTTGAGACGGACTCTCACTCTGTCGCCCAGGCTGGAGTGTAGTGGCGCGATCTCGGCTCACTGCAACTTCTGCCTCCCGGGTTCAAGAGATTCTCCTGCCTCAGCCTCCTGAGTAGCTCGGATTGCAGGCGCGCGCCACCACGCCCGGCTAATTTTTGTATTTCGAGTAGAGACGGCGTTTCACCACGTTGGTCAGGCTGCTCTCGAACTCCTGACCTCGTAATCCGCCTGCCTCAGACTCCCAAACTGATGGGATTAAAGGCGTGAGCCACCGCGTCCGGCCGTTCGTGTCTGATTTCTATATGTGCTGCCGAAGCGAGCACTCGTGTCTAATTTTTGATTTCCCCACACCACGCACGCTGGACTAGATCACCGGCTGGGCAAGGAAGGGGGTCTGCGTCCCTGCGGGGTCCTGGCAGCTCCCGCGCCAGGACTTTGTTGAATGAATGACTGAACTGAGCGGGCGCCGCGGGGCGGGGCGTCCCGAAGCGGACCTCAAGGCGGGCGGAGGCGAGAGCTCCGCCCCGGAAGGCGGGGGCGGGGGCGGGGCGGCGGCCGTGGGTCCCTGCCGGCCGGCGGCGGGCGCAGACAGCGGCGGGCGCAGGACGTGCACTATGGCTCGGGGCTCGCTGCGCCGGTTGCTGCGGCTCCTCGTGCTGGGGCTCTGGCTGGCGTTGCTGCGCTCCGTGGCCGGGGAGCAAGCGCCAGGTACGCGGGACTCCGGGGTCGGGGAACCCCGGGCCGGGGCTCGGGAGCCGGACTGGGTGTCTGGAGAACAGCGCCGAACTGGGGGAACAGGCGGATGTGGGGATCTGGGGTCAGGTGGCCTTCAAACAGCTCGCTCCCGGCTGTGGGAAGTTCCATCACTCTCCAAGCTTCATTCACAATCCGGGCCTCAGTTTCTCCCACCGTCCAATTGGGGTTGGGGGGGGTCTTCAGTTCCACAAGTCCGAAGTACTTCGAATGGAGAGAGAAAGTGAGTGAGGGCGGGATGTTTAGTCTAGGAAGGGGCACGCCCCCAGCCTGGTCCGTACAGGGTCTAACTAGCCCCAGTGATCGACGAGTTGGGGAGGCCGTCGAGAGGCACTAGGGTCTGTGCCCTCTATACCATGTGGGGTGCCCCCTTCCATCCGGTGACTTCAGTGCCCAGCTATGCGGGGGGAGGGACTGGGGTCGGGCCCGGTGCCCAGGAGTGAGTCACCCGCCGGCGGCAGGGGGGTTGTGGGGACCTGACCCCCCCCACCCCCAGCGTCCCGCGCTACGCCCTCCCTCCCGGAGCTGCCGTGTCCCGGTCGGGCCGTGCGGTCACCTGTGAGGAATGCGCGGGGAGGGCGCCGGTGACTCACGTTATTCGAGCCGGCCGACCCTGACCTCAGACCCCAGAATAGCCGAGTCCCGCCCCCAGCCTCTGACCC&quot;</code></pre>
+<pre class="r"><code>print(nchar(EXP_76_sgRNA_1_Query))</code></pre>
+<pre><code>## [1] 1620</code></pre>
 </div>
 <div id="sgrna_2-primer-query-sequence" class="section level2">
 <h2>sgRNA_2 Primer Query Sequence</h2>
-<pre class="r"><code>Fn14_whole_seq_dnastring[(start(sgRNA_2_match)-800) : end(sgRNA_2_match+800)] %&gt;% as.character() %&gt;% print()</code></pre>
+<pre class="r"><code>EXP_76_sgRNA_2_Query &lt;- Fn14_whole_seq_dnastring[(start(sgRNA_2_match)-buffer_bp) : end(sgRNA_2_match+buffer_bp)] %&gt;% 
+  as.character()
+print(EXP_76_sgRNA_2_Query)</code></pre>
 <pre><code>## [1] &quot;TGCGCGGGGAGGGCGCCGGTGACTCACGTTATTCGAGCCGGCCGACCCTGACCTCAGACCCCAGAATAGCCGAGTCCCGCCCCCAGCCTCTGACCCGAGGCCCCCTCCCCAGGCACCGCCCCCTGCTCCCGCGGCAGCTCCTGGAGCGCGGACCTGGACAAGTGCATGGACTGCGCGTCTTGCAGGGCGCGACCGCACAGCGACTTCTGCCTGGGCTGTGAGTGGGGGGCAGGGCCAGTGGCCAGCGGACCCCAGACTGGGAGGGAGGGTGGCTGGTGCGCAGAGCGGGGCCGAGAGCTTTGCATCTGGGAAATCATTCGGGAGGAGGTGGGAGCTGGGAGGGGGCTCCGGTCAGGGAGGAGGCCACGTTTGGGAGAAGGCAGAAGGCTCAGTCTTAGGGGGCGGGGCTGGCCTGGAGAGGGGCGAGGTCTGACTCCGAGTCCCGCCCCCAGGCGCTGCAGCACCTCCTGCCCCCTTCCGGCTGCTTTGGCCCATCCTTGGGGGCGCTCTGAGCCTGACCTTCGTGCTGGGGCTGCTTTCTGGCTTTTTGGTCTGGAGACGATGCCGCAGGAGAGAGAAGTTCACCAGTAAGTGTGCCCTGGCCTGCCCAGCCCTGTCAGCACTCGACCTTTTCTCTGCTGCTGACGACCCCACCTCTTATCTTGCAGCCCCCATAGAGGAGACCGGCGGAGAGGGCTGCCCAGCTGTGGCGCTGATCCAGTGACAATGTGCCCCCTGCCAGCCGGGGCTCGCCCACTCATCATTCATTCATCCATTCTAGAGCCAGTCTCTGCCTCCCAGACGCGGCGGGAGCCAAGCTCCTCCAACCACAAGGGGGGTGGGGGGCGGTGAATCACCTCTGAGGCCTGGGCCCAGGGTTCAGGGGAACCTTCCAAGGTGTCTGGTTGCCCTGCCTCTGGCTCCAGAACAGAAAGGGAGCCTCACGCTGGCTCACACAAAACAGCTGACACTGACTAAGGAACTGCAGCATTTGCACAGGGGAGGGGGGTGCCCTCCTTCCTAGAGGCCCTGGGGGCCAGGCTGACTTGGGGGGCAGACTTGACACTAGGCCCCACTCACTCAGATGTCCTGAAATTCCACCACGGGGGTCACCCTGGGGGGTTAGGGACCTATTTTTAACACTAGGGGGCTGGCCCACTAGGAGGGCTGGCCCTAAGATACAGACCCCCCCAACTCCCCAAAGCGGGGAGGAGATATTTATTTTGGGGAGAGTTTGGAGGGGAGGGAGAATTTATTAATAAAAGAATCTTTAACTTTAAATGGTTTGGAGAGGCAGTGATCCCCGACTGACTCCCCTGAGCTGGAGGGAGGGAGTGAGTCAGCCAGCCGCGGGGGCGGGGGTGAGGCTCTGACTCACACATTCTCAATGCCTGGAACTCAGCCGGCAAGGACCTGGCTGGCCCTAACAGTTTTCCAGGGAAGATCTTGAGGAGAAACCCCAGCATCCCGCGCCTCTGCCCTCTCCACCATCCCCAAAAGCCCCAGGTTCCAGACTGAAGCCTTCCTTTGCTCAGCAATCTTTATTCAGTTCTTCTTGGGGGTGGGATGCCTCCCTTCCCATGCTCCCACCCCTCCCATCCCAGAACTCCGTTGGGCTCA&quot;</code></pre>
+<pre class="r"><code>print(nchar(EXP_76_sgRNA_2_Query))</code></pre>
+<pre><code>## [1] 1620</code></pre>
+</div>
+<div id="exporting-query-sequences-as-fasta-files" class="section level2">
+<h2>Exporting query sequences as fasta files</h2>
+<pre class="r"><code>write.fasta(EXP_76_sgRNA_1_Query, &quot;EXP_76_sgRNA_1_Query&quot;, &quot;../output/EXP_76_sgRNA_1_Query.fa&quot;, as.string = TRUE)
+write.fasta(EXP_76_sgRNA_2_Query, &quot;EXP_76_sgRNA_2_Query&quot;, &quot;../output/EXP_76_sgRNA_2_Query.fa&quot;, as.string = TRUE)</code></pre>
 </div>
 </div>
 

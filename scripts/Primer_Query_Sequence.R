@@ -14,14 +14,14 @@ library('tidyverse')
 
 
 #' ## Setting WD
-setwd('~/Dropbox/Research/PhD/Experiments/EXP_76/')
+# setwd('~/Dropbox/Research/PhD/Experiments/EXP_76/')
 
 
 #' ## Reading in fasta files
 #' These sequences contain 1kB upstream and 1kb downstream of the first and last exon
 #'
 #' #### Whole Sequence (including 1kB up and downstream)
-Fn14_whole_seq_fasta <- read.fasta(file = "EXP_76_Fn14_Primer_Design//sequence/TNFRSF12A_Whole_Seq.fa", 
+Fn14_whole_seq_fasta <- read.fasta(file = "../sequence/TNFRSF12A_Whole_Seq.fa", 
                              seqtype = 'DNA',
                              as.string = TRUE)
 Fn14_whole_seq_fasta <- Fn14_whole_seq_fasta[[1]] 
@@ -39,7 +39,7 @@ Fn14_whole_seq_dnastring %>% class() %>% print()
 
 #' ## Sequences by Region
 #' Note, first and last region are not part of the Fn14 gene
-Fn14_Region_seq <- read.fasta(file = "EXP_76_Fn14_Primer_Design/sequence/TNFRSF12A_Region_Seq.fa", 
+Fn14_Region_seq <- read.fasta(file = "../sequence/TNFRSF12A_Region_Seq.fa", 
                              seqtype = 'DNA',
                              as.string = TRUE)
 
@@ -99,16 +99,22 @@ Fn14_whole_seq_dnastring[start(sgRNA_2_match) : end(sgRNA_2_match)] %>% as.chara
 # Defining number of buffer base pairs
 buffer_bp <- 800
 #' ## sgRNA_1 Primer Query Sequence
-Fn14_whole_seq_dnastring[(start(sgRNA_1_match)-buffer_bp) : end(sgRNA_1_match+buffer_bp)] %>% 
-  as.character() %>% 
-  print()
+EXP_76_sgRNA_1_Query <- Fn14_whole_seq_dnastring[(start(sgRNA_1_match)-buffer_bp) : end(sgRNA_1_match+buffer_bp)] %>% 
+  as.character()
+print(EXP_76_sgRNA_1_Query)
+print(nchar(EXP_76_sgRNA_1_Query))
 
 
 #' ## sgRNA_2 Primer Query Sequence
-Fn14_whole_seq_dnastring[(start(sgRNA_2_match)-buffer_bp) : end(sgRNA_2_match+buffer_bp)] %>% 
-  as.character() %>% 
-   print()
+EXP_76_sgRNA_2_Query <- Fn14_whole_seq_dnastring[(start(sgRNA_2_match)-buffer_bp) : end(sgRNA_2_match+buffer_bp)] %>% 
+  as.character()
+print(EXP_76_sgRNA_2_Query)
+print(nchar(EXP_76_sgRNA_2_Query))
 
+
+#' ## Exporting query sequences as fasta files
+write.fasta(EXP_76_sgRNA_1_Query, "EXP_76_sgRNA_1_Query", "../output/EXP_76_sgRNA_1_Query.fa", as.string = TRUE)
+write.fasta(EXP_76_sgRNA_2_Query, "EXP_76_sgRNA_2_Query", "../output/EXP_76_sgRNA_2_Query.fa", as.string = TRUE)
 
 
 
